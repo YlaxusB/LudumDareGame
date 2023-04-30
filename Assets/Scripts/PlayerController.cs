@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
-using UnityEditor.Build.Player;
+//using UnityEditor.Build.Player;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTransform;
     public GameObject playerObject;
     public CharacterController controller;
+    public Transform handTransform;
 
 
     public int playerSpeed = 100;
@@ -25,6 +26,14 @@ public class PlayerController : MonoBehaviour
 
 
     Vector3 velocity = new Vector3();
+
+    public Texture tex;
+
+    void OnGUI()
+    {
+        GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, 10, 10), tex);
+    }
+
 
     void Update()
     {
@@ -58,8 +67,9 @@ public class PlayerController : MonoBehaviour
         currentMouseY -= mouseY;
         // Clamp camera Y rotation, so it cant be less than -90 and more than 90
         currentMouseY = Mathf.Clamp(currentMouseY, -90, 90);
-        // Apply mouseY to camera and mouseX to player object
+        // Apply mouseY to camera and hand then apply mouseX to player object
         cameraTransform.localRotation = Quaternion.Euler(currentMouseY, 0, 0);
+        handTransform.localRotation = Quaternion.Euler(currentMouseY, 0, 0);
         playerObject.transform.localRotation = Quaternion.Euler(playerObject.transform.eulerAngles + new Vector3(0, mouseX, 0));
     }
 
