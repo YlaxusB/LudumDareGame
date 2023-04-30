@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * upSensitivity * Time.deltaTime;
         currentMouseY -= mouseY;
         // Clamp camera Y rotation, so it cant be less than -90 and more than 90
-        currentMouseY = Mathf.Clamp(currentMouseY, -90, 90);
+        currentMouseY = Mathf.Clamp(currentMouseY, -89, 89);
         // Apply mouseY to camera and hand then apply mouseX to player object
         cameraTransform.localRotation = Quaternion.Euler(currentMouseY, 0, 0);
         handTransform.localRotation = Quaternion.Euler(currentMouseY, 0, 0);

@@ -1,147 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoxScript : MonoBehaviour
 {
-    public Transform handObject;
-    public bool isHoldingBox = false;
-    public Transform box;
-
-    public Transform debugObject;
-
+    public Vector3 next;
+    public Vector3 current;
+    public List<Vector3> points;
+    public List<Vector3> worldPoints = new List<Vector3>();
     public Transform trajectoryTransform;
-    public Transform trajectoryTransform2;
-    public float length = 10f;
-    public float strength = 10f;
-    public float gravity = -9.81f;
+    public BoxHandler boxHandler;
 
-    private void OnTriggerEnter(Collider collider)
+    private void Start()
     {
-        if(!isHoldingBox && collider.transform.tag == "Box")
+        foreach (var point in points)
         {
-            // Set the new box to the script
-            isHoldingBox = true;
-            box = collider.transform;
-
-            // Move the new box to player's body
-            box.transform.SetParent(handObject);
-            box.transform.localPosition = new Vector3(0.94f, 0.38f, 1.092f);
-            box.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            worldPoints.Add(trajectoryTransform.TransformPoint(point));
         }
+        current = worldPoints[0];
+        transform.position = worldPoints[0];
     }
 
-    private void Update()
+    float i = 0.0f;
+    int j = 0;
+    // Update is called once per frame
+    void Update()
     {
-        // Delethe the box with mouse left click
-        if (Input.GetMouseButtonDown(0))
+        // Check if its close to end
+        if(j < worldPoints.Count - 2)
         {
-            isHoldingBox = false;
-            Destroy(box.gameObject);
-        }
-
-        // Show trajectory with right button
-        //if (Input.GetMouseButtonDown(1))
-        //{
-            List<Vector3> points = GetTrajectoryPoints(((int)length), length, gravity, strength);
-        if(points.Count > 0)
-        {
-            Mesh newMesh = BuildMeshAlongPoints(points, 0.3f, false);
-            Mesh secondMesh = BuildMeshAlongPoints(points, 0.3f, true);
-            trajectoryTransform.GetComponent<MeshFilter>().mesh = newMesh;
-            trajectoryTransform2.GetComponent<MeshFilter>().mesh = secondMesh;
-        }
-
-
-        //      }
-    }
-
-    private List<Vector3> GetTrajectoryPoints(int pointLength, float length, float gravity, float strength)
-    {
-        List<Vector3> points = new List<Vector3>();
-        Vector3 start = Vector3.zero;
-        points.Add(start);
-        int i = 0;
-        while (points[points.Count - 1].y >= 0)
-        {
-            if(points.Count > 2 && points[points.Count - 1].y - points[points.Count - 2].y <= 0.001f)
+            // Check if its distant enough to get next point in the curve
+            if (Vector3.Distance(transform.position, current) > 0.3f && i <= 0.0)
             {
-                Debug.Log("loop break");
-                break;
+
+                i = 0.0f;
+                j++;
+                current = worldPoints[j];
+                next = worldPoints[j + 1];
+
             }
-            float t = (float)i / pointLength;
-            //Vector3 point = Vector3.Lerp(start, end, t);
-            Vector3 point = new Vector3(points[points.Count - 1].x + strength, 0, 0);
-            point.y += gravity * t * t * t;
-            points.Add(point);
-            i++;
-        }
-        /*
-        for (int i = 0; i < pointLength; i++)
-        {
-            float t = (float)i / pointLength;
-            Vector3 point = Vector3.Lerp(start, end, t);
-            point.y += gravity * t * t * t;
-            points.Add(point);
-        }
-        */
-        //points.Add(end);
-        return points;
-    }
-
-    private Mesh BuildMeshAlongPoints(List<Vector3> points, float width, bool invertNormals)
-    {
-        List<Vector3> verts = new List<Vector3>();
-        for (int i = 0; i < points.Count; i++)
-        {
-            verts.Add(new Vector3(points[i].x, points[i].y, width));
-            verts.Add(new Vector3(points[i].x, points[i].y, -width));
-        }
-
-        // Create the uvs
-        List<Vector2> uvs = new List<Vector2>();
-        for (int i = 0; i < points.Count; i++)
-        {
-            float completionPercent = 1 / (points.Count - 1);
-            uvs.Add(new Vector2(0, completionPercent));
-            uvs.Add(new Vector2(1, completionPercent));
-        }
-
-        // Create the triangles
-        List<int> triangles = new List<int>();
-        if (!invertNormals)
-        {
-            for (int i = 0; i < 2 * (points.Count - 1); i += 2)
+            // Lerp between the last point and the next point
+            if (i <= 1.0f)
             {
-                triangles.Add(i);
-                triangles.Add(i + 2);
-                triangles.Add(i + 1);
-
-                triangles.Add(i + 1);
-                triangles.Add(i + 2);
-                triangles.Add(i + 3);
+                transform.position = Vector3.Lerp(current, next, i);
+                i += 1f;
+            }
+            else
+            {
+                i = 0;
             }
         } else
         {
-            for (int i = 0; i < 2 * (points.Count - 1); i += 2)
-            {
-                triangles.Add(i);
-                triangles.Add(i + 1);
-                triangles.Add(i + 2);
+            // Destroy the box and spawn a new one
+            Destroy(gameObject);
 
-                triangles.Add(i + 1);
-                triangles.Add(i + 3);
-                triangles.Add(i + 2);
-            }
+            boxHandler.SpawnRandomBox();
         }
 
-        Mesh mesh = new Mesh();
-        mesh.vertices = verts.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.uv = uvs.ToArray();
-        return mesh;
+         
     }
 }
