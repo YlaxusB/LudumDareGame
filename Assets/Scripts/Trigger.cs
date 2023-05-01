@@ -5,10 +5,14 @@ using UnityEngine;
 public class Trigger : MonoBehaviour
 {
     // Start is called before the first frame update
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("eae");
+        if (collider.gameObject.layer == LayerMask.NameToLayer("House") || collider.gameObject.layer == LayerMask.NameToLayer("Box"))
+        {
+            Debug.Log("Collided house 1");
+        }
     }
+
     void Start()
     {
         
