@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.VisualScripting;
 //using UnityEditor.Build.Player;
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     public bool isRestarting = false;
 
+    bool open = false;
+
     void OnGUI()
     {
         GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, 10, 10), tex);
@@ -39,10 +42,33 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (open == true && Input.anyKeyDown)
+        {
+            open = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            isRestarting = !isRestarting;
+        }
+        // Mute music
         if (Input.GetKeyDown(KeyCode.M))
         {
             playerObject.GetComponent<AudioSource>().mute = !playerObject.GetComponent<AudioSource>().mute;
         }
+        // Esc for unlocking mouse
+        if (Input.GetKeyDown(KeyCode.Escape) && !open)
+        {
+            open = true;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            isRestarting = !isRestarting;
+        } else if (Input.GetKeyDown(KeyCode.Escape) && open)
+        {
+            open = false;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            isRestarting = !isRestarting;
+        }
+
         // Get the horizontal and vertical values (by default they are WASD)
         float horizontal = Input.GetAxis("Horizontal") * (playerSpeed / 2) * Time.deltaTime;
         controller.Move(new Vector3(horizontal, 0, 0));

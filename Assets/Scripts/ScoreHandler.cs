@@ -10,7 +10,7 @@ public class ScoreHandler : MonoBehaviour
 {
     // Start is called before the first frame update
     public int score = 0;
-    public float timeLeft = 30.0f; // The starting time in seconds
+    public float timeLeft = 45f; // The starting time in seconds
     public RoadGenerator roadGenerator;
     public StartScreenScript startScreenScript;
     public TextMeshProUGUI timerText;
@@ -74,7 +74,7 @@ public class ScoreHandler : MonoBehaviour
             timeOverScoreText.text = "Score: " + score.ToString();
             timeOverHighestScoreText.text = "Highest Score: " + highestScore.ToString();
             score = 0;
-            timeLeft = 30.0f; // The starting time in seconds
+            timeLeft = 45.0f; // The starting time in seconds
             transform.GetComponent<TextMeshProUGUI>().text = "Score: " + score.ToString();
             highestScoreTextMainUI.text = "Highest Score: " + highestScore.ToString();
             timerText.text = "Time: " + ((int)timeLeft).ToString();

@@ -14,8 +14,6 @@ public class BoxHandler : MonoBehaviour
     public bool isHoldingBox = false;
     public Transform box;
 
-    public Transform debugObject;
-
     public Transform trajectoryTransform;
     public Transform trajectoryTransform2;
     public float length = 10f;
@@ -26,6 +24,7 @@ public class BoxHandler : MonoBehaviour
     public int startingBoxes = 5;
     public bool preventSpam = false;
     public RoadGenerator roadGenerator;
+    public PlayerController playerController;
     float lastBoxZ = 0;
 
     private void Start()
@@ -68,7 +67,7 @@ public class BoxHandler : MonoBehaviour
     private void Update()
     {
         // Show trajectory when holding a box
-        if (isHoldingBox)
+        if (isHoldingBox && !playerController.isRestarting)
         {
             //
             // Get the trajectory points
@@ -145,7 +144,6 @@ public class BoxHandler : MonoBehaviour
             points.Add(point);
             i++;
         }
-        debugObject.transform.position = cameraTransform.TransformPoint(point);
         return points;
     }
 
