@@ -23,6 +23,9 @@ public class BoxScript : MonoBehaviour
 
     public int gameSpeed;
 
+    public int boxSoundEffect;
+
+    public AudioClip boxSound;
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("House") && !collided)
@@ -40,10 +43,31 @@ public class BoxScript : MonoBehaviour
             int score = ((int)Mathf.Clamp(200 / distance, 0, 100));
             scoreHandler.score += score;
             scoreHandler.UpdateScore(score);
+
+            // Play the sound effect
+            GameObject soundObject = new GameObject();
+            soundObject.transform.position = transform.position;
+            AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+            audioSource.enabled = true;
+            audioSource.spatialize = true;
+            audioSource.spatialBlend = 1;
+            // Set the minimum and maximum distances for the sound
+            audioSource.minDistance = 10;
+            audioSource.maxDistance = 10000;
+            audioSource.volume = 0.3f;
+
+            audioSource.clip = boxSound;
+            audioSource.time = 0.43f;
+            audioSource.volume = 0.2f;
+            //audioSource.PlayOneShot(boxSound);
+            audioSource.Play();
+            audioSource.AddComponent<SoundObjectScript>();
+
             // Destroy the box and spawn a new one
             collided = true;
             Destroy(gameObject);
             boxHandler.SpawnRandomBox();
+
         }
     }
 
@@ -82,12 +106,12 @@ public class BoxScript : MonoBehaviour
             if (Vector3.Distance(worldPoints[currentPointIndex] + new Vector3(0, 0, deviation), transform.position) <= 0.01f)
             {
                 currentPointIndex++;
-                // Destroy the box when it reaches the end of the trajectory
+                // Destroy the box when it reaches the end of the trajectory without hitting something
                 if (currentPointIndex >= worldPoints.Count - 1)
                 {
-                    Debug.Log("DESTROYED");
                     Destroy(gameObject);
                     boxHandler.SpawnRandomBox();
+                    scoreHandler.timeLeft -= 1f;
                 }
 
             }
@@ -101,6 +125,7 @@ public class BoxScript : MonoBehaviour
         if (!isBeingHold && !isThrowing)
         {
             transform.position += new Vector3(0, 0, -gameSpeed * Time.deltaTime);
+            transform.GetComponent<Rigidbody>().velocity += new Vector3(0, -gameSpeed * Time.deltaTime, 0);
         }
     }
 }

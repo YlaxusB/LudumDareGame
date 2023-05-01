@@ -40,7 +40,6 @@ public class BoxHandler : MonoBehaviour
     {
         if (!isHoldingBox && collider.transform.tag == "Box" && collider.GetComponent<BoxScript>().isThrowing == false)
         {
-            Debug.Log("COLLIDING");
             // Set the new box to the script
             isHoldingBox = true;
             box = collider.transform;
@@ -74,7 +73,6 @@ public class BoxHandler : MonoBehaviour
             //
             // Get the trajectory points
             List<Vector3> points = GetTrajectoryPoints(((int)length), length, gravity, strength);
-            Debug.Log(points.Count - 1);
             // Only continue if theres more than 1 point
             if (points.Count > 1)
             {
@@ -82,7 +80,6 @@ public class BoxHandler : MonoBehaviour
                 trajectoryTransform.GetComponent<Renderer>().enabled = true;
                 trajectoryTransform2.GetComponent<Renderer>().enabled = true;
                 // Build the meshes with the points
-                Debug.Log(points.Count);
                 Mesh firstMesh= BuildMeshAlongPoints(points, 1.5f, false);
                 Mesh secondMesh = BuildMeshAlongPoints(points, 1.5f, true);
                 // Apply the meshes
@@ -146,7 +143,6 @@ public class BoxHandler : MonoBehaviour
             point = new Vector3(points[points.Count - 1].x + 0.5f, 0, 0);
             point.y += gravity * t * t;
             points.Add(point);
-            //Debug.Log(point.y);
             i++;
         }
         debugObject.transform.position = cameraTransform.TransformPoint(point);
