@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
@@ -22,10 +23,19 @@ public class BoxHandler : MonoBehaviour
     public float gravity = -9.81f;
     public GameObject boxPrefab;
     public ScoreHandler scoreHandler;
-
+    public int startingBoxes = 5;
     public bool preventSpam = false;
 
     float lastBoxZ = 0;
+
+    private void Start()
+    {
+        for(int i = 0; i < startingBoxes; i++)
+        {
+            SpawnRandomBox();
+        }
+    }
+
     private void OnTriggerEnter(Collider collider)
     {
         if (!isHoldingBox && collider.transform.tag == "Box" && collider.GetComponent<BoxScript>().isThrowing == false)
@@ -49,7 +59,7 @@ public class BoxHandler : MonoBehaviour
             // Move the new box to player's body
             box.transform.SetParent(cameraTransform);
             box.transform.localPosition = new Vector3(0.9399955f, -1.555926f, 1.083517f);
-            box.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            box.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
             box.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
             box.GetComponent<BoxScript>().isBeingHold = true;
@@ -58,11 +68,13 @@ public class BoxHandler : MonoBehaviour
 
     private void Update()
     {
-        // Show trajectory when holding right button
-        if (Input.GetMouseButton(1) && isHoldingBox)
+        // Show trajectory when holding a box
+        if (isHoldingBox)
         {
+            //
             // Get the trajectory points
             List<Vector3> points = GetTrajectoryPoints(((int)length), length, gravity, strength);
+            Debug.Log(points.Count - 1);
             // Only continue if theres more than 1 point
             if (points.Count > 1)
             {
@@ -70,13 +82,14 @@ public class BoxHandler : MonoBehaviour
                 trajectoryTransform.GetComponent<Renderer>().enabled = true;
                 trajectoryTransform2.GetComponent<Renderer>().enabled = true;
                 // Build the meshes with the points
-                Mesh firstMesh= BuildMeshAlongPoints(points, 1.0f, false);
-                Mesh secondMesh = BuildMeshAlongPoints(points, 1.0f, true);
+                Debug.Log(points.Count);
+                Mesh firstMesh= BuildMeshAlongPoints(points, 1.5f, false);
+                Mesh secondMesh = BuildMeshAlongPoints(points, 1.5f, true);
                 // Apply the meshes
                 trajectoryTransform.GetComponent<MeshFilter>().mesh = firstMesh;
                 trajectoryTransform2.GetComponent<MeshFilter>().mesh = secondMesh;
             }
-            // Add boxScript to box when left click (while holding mouse right button)
+            // Add boxScript to box when left click (while holding a box)
             if (Input.GetMouseButtonDown(0))
             {
                 BoxScript boxScript = box.GetComponent<BoxScript>();
@@ -86,15 +99,6 @@ public class BoxHandler : MonoBehaviour
                 boxScript.isThrowing = true;
                 boxScript.isBeingHold = false;
                 boxScript.scoreHandler = scoreHandler;
-
-                /*
-                if (box.GetComponent<BoxCollider>())
-                {
-                    box.GetComponent<BoxCollider>().isTrigger = true;
-                }
-                */
-
-
 
                 boxScript.boxHandler = this;
                 box.parent = null;
@@ -111,8 +115,10 @@ public class BoxHandler : MonoBehaviour
     // Spawn new random boxes
     public void SpawnRandomBox()
     {
-        float randomBoxZ = Random.Range(0, 800);
-        float randomBoxX = Random.Range(-20, 20);
+        // Forward
+        float randomBoxZ = Random.Range(200, 600);
+        // Sides
+        float randomBoxX = Random.Range(-15, 15);
         Transform newBox = Instantiate(boxPrefab).transform;
         BoxScript newBoxScript = newBox.GetComponent<BoxScript>();
         newBoxScript.trajectoryTransform = trajectoryTransform;
@@ -131,15 +137,18 @@ public class BoxHandler : MonoBehaviour
         points.Add(start);
         int i = 0;
         Vector3 pointEnd = Vector3.zero;
-        while (pointEnd.y >= -4)
+        Vector3 point = Vector3.zero;
+        while (cameraTransform.TransformPoint(new Vector3(0, point.y, point.x)).y >= -4)
         {
-            pointEnd = trajectoryTransform.TransformPoint(points[points.Count - 1]);
+            pointEnd = cameraTransform.TransformPoint(points[points.Count - 1]);
             float t = (float)i / (pointLength * gravity);
-            Vector3 point = new Vector3(points[points.Count - 1].x + 0.5f, 0, 0);
+            point = new Vector3(points[points.Count - 1].x + 0.5f, 0, 0);
             point.y += gravity * t * t;
             points.Add(point);
+            //Debug.Log(point.y);
             i++;
         }
+        debugObject.transform.position = cameraTransform.TransformPoint(point);
         return points;
     }
 
