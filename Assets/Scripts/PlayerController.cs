@@ -39,6 +39,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            playerObject.GetComponent<AudioSource>().mute = !playerObject.GetComponent<AudioSource>().mute;
+        }
         // Get the horizontal and vertical values (by default they are WASD)
         float horizontal = Input.GetAxis("Horizontal") * (playerSpeed / 2) * Time.deltaTime;
         controller.Move(new Vector3(horizontal, 0, 0));

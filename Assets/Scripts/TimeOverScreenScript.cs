@@ -40,5 +40,6 @@ public class TimeOverScreenScript : MonoBehaviour
         playerCamera.localRotation = Quaternion.Euler(0, 0, 0);
         playerController.currentMouseY = 0;
         playerController.isRestarting = false;
+        scoreHandler.score = 0;
     }
 }
