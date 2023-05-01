@@ -25,7 +25,7 @@ public class BoxHandler : MonoBehaviour
     public ScoreHandler scoreHandler;
     public int startingBoxes = 5;
     public bool preventSpam = false;
-
+    public RoadGenerator roadGenerator;
     float lastBoxZ = 0;
 
     private void Start()
@@ -116,7 +116,7 @@ public class BoxHandler : MonoBehaviour
     public void SpawnRandomBox()
     {
         // Forward
-        float randomBoxZ = Random.Range(200, 600);
+        float randomBoxZ = Random.Range(200 + roadGenerator.gameSpeed, 600);
         // Sides
         float randomBoxX = Random.Range(-15, 15);
         Transform newBox = Instantiate(boxPrefab).transform;
@@ -124,6 +124,7 @@ public class BoxHandler : MonoBehaviour
         newBoxScript.trajectoryTransform = trajectoryTransform;
         newBoxScript.boxHandler = this;
         newBoxScript.scoreHandler = scoreHandler;
+        newBoxScript.roadGenerator = roadGenerator;
         newBox.position = new Vector3(randomBoxX, 15, randomBoxZ);
         lastBoxZ = randomBoxZ;
     }

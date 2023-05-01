@@ -4,19 +4,15 @@ using UnityEngine;
 
 public class ChunkScript : MonoBehaviour
 {
-    public float speed = 70;
     public int chunkLength;
     public RoadGenerator roadGenerator;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+    public int gameSpeed;
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += new Vector3(0, 0, -speed * Time.deltaTime);
+        transform.position += new Vector3(0, 0, -roadGenerator.gameSpeed * Time.deltaTime);
 
         if (transform.position.z < -chunkLength * 3)
         {

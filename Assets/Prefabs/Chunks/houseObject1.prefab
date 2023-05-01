@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7021485584672962539}
   - component: {fileID: 6777609382364893003}
   - component: {fileID: 6894979756513744286}
-  - component: {fileID: 8117984928679809323}
   m_Layer: 9
   m_Name: house_big_1_fence
   m_TagString: Untagged
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8117984928679809323
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466960983124423315}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 8.230101, y: 1.1717492, z: 9.824297}
-  m_Center: {x: -0.00000047683716, y: 0.58587426, z: 0.00000023841858}
 --- !u!1 &3154855180673314979
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,8 +280,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.8363814, y: 6.099811, z: 6.415325}
-  m_Center: {x: -0.00014472008, y: 3.049905, z: -0.5480763}
+  m_Size: {x: 5.8363814, y: 8.11548, z: 6.76833}
+  m_Center: {x: -0.0001446406, y: 2.0420723, z: -0.37157375}
 --- !u!114 &3154855179505439098
 MonoBehaviour:
   m_ObjectHideFlags: 0

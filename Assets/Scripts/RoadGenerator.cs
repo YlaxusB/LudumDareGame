@@ -17,6 +17,8 @@ public class RoadGenerator : MonoBehaviour
     private int chunkIndex = 1;
     private float lastZ = 0;
 
+    public int gameSpeed = 70;
+
     public Transform lastChunk;
     void Start()
     {

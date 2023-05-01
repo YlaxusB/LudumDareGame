@@ -16,9 +16,13 @@ public class BoxScript : MonoBehaviour
     public Transform trajectoryTransform;
     public BoxHandler boxHandler;
     public ScoreHandler scoreHandler;
+    public RoadGenerator roadGenerator;
     bool collided = false;
     public bool isThrowing = false;
     public bool isBeingHold = false;
+
+    public int gameSpeed;
+
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.layer == LayerMask.NameToLayer("House") && !collided)
@@ -34,9 +38,8 @@ public class BoxScript : MonoBehaviour
             boxLocal.y = boxLocal.y / 2;
             float distance = Vector3.Distance(collidedHouse.GetComponent<HouseScript>().deliverySpot, boxLocal);
             int score = ((int)Mathf.Clamp(200 / distance, 0, 100));
-            Debug.Log(score);
             scoreHandler.score += score;
-            scoreHandler.UpdateScore();
+            scoreHandler.UpdateScore(score);
             // Destroy the box and spawn a new one
             collided = true;
             Destroy(gameObject);
@@ -67,10 +70,11 @@ public class BoxScript : MonoBehaviour
     float speed = 1900;
     void Update()
     {
+        gameSpeed = roadGenerator.gameSpeed;
         // Check if its close to end
         if (worldPoints.Count > 2)
         {
-            deviation += -70 * Time.deltaTime;
+            deviation += -gameSpeed * Time.deltaTime;
             // Move towards the current point
             transform.position = Vector3.MoveTowards(transform.position, worldPoints[currentPointIndex] + new Vector3(0, 0, deviation), (speed * Time.deltaTime) / 3);
 
@@ -96,7 +100,7 @@ public class BoxScript : MonoBehaviour
         }
         if (!isBeingHold && !isThrowing)
         {
-            transform.position += new Vector3(0, 0, -70 * Time.deltaTime);
+            transform.position += new Vector3(0, 0, -gameSpeed * Time.deltaTime);
         }
     }
 }

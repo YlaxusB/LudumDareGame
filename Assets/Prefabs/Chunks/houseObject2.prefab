@@ -294,8 +294,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.3989944, y: 4.7461233, z: 5.3482265}
-  m_Center: {x: 0.00000047683716, y: 2.3730617, z: 0.02472508}
+  m_Size: {x: 5.3989944, y: 6.9451523, z: 5.4677143}
+  m_Center: {x: 0.00000063578284, y: 1.2735583, z: 0.084469475}
 --- !u!114 &5218421952438413692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +322,6 @@ GameObject:
   - component: {fileID: 62235027183632573}
   - component: {fileID: 164941932465517441}
   - component: {fileID: 8849051054368153898}
-  - component: {fileID: 1012767256171916657}
   m_Layer: 9
   m_Name: house_small_1_fence
   m_TagString: Untagged
@@ -395,19 +394,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1012767256171916657
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4082192657107070015}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 7.1912894, y: 1.171749, z: 9.137477}
-  m_Center: {x: 0.00000023841858, y: 0.5858738, z: 0}
 --- !u!1 &5218421952610502078
 GameObject:
   m_ObjectHideFlags: 0
