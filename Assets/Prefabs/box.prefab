@@ -141,7 +141,7 @@ MonoBehaviour:
   isBeingHold: 0
   gameSpeed: 0
   boxSoundEffect: 0
-  boxSound: {fileID: 8300000, guid: e6ab6b6de17590142b02a22a68eae615, type: 3}
+  boxSound: {fileID: 8300000, guid: f147842556c9c934088a4dbe4dc404fa, type: 3}
 --- !u!82 &4532000080701674061
 AudioSource:
   m_ObjectHideFlags: 0
