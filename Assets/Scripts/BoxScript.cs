@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
-using UnityEditor.Build.Content;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class BoxScript : MonoBehaviour
 {

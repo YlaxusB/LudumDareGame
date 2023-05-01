@@ -25,6 +25,15 @@ public class ScoreHandler : MonoBehaviour
     public Button timeOverRestartButton;
     public GameObject scoreUI;
     public PlayerController playerController;
+
+    private Canvas canvas;
+    private RectTransform canvasRectTransform;
+    private float screenWidth;
+    private float screenHeight;
+    private void Start()
+    {
+
+    }
     public void UpdateScore(float scoreGain)
     {
         transform.GetComponent<TextMeshProUGUI>().text = "Score: " + score.ToString();
